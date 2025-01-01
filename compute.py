@@ -34,7 +34,7 @@ def main():
 
     for A, B in itertools.combinations(range(cpu_count), 2):
             latency = run_trials(A, B, TRIALS_PER_PAIR)
-            graph.add_edge(A, B, weight=(1.0 / latency))
+            graph.add_edge(A, B, weight=(1.0 / latency), latency=latency)
             bar.next()
 
     bar.finish()
