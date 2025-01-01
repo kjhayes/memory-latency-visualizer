@@ -1,55 +1,43 @@
 #! /usr/bin/python3
 
-import subprocess
-import os
-import networkx as nx
-import itertools
 import matplotlib.pyplot as plt
-import matplotlib as mpl
-from progress.bar import Bar
+import matplotlib
+matplotlib.use("Agg")
+import argparse
+import networkx as nx
 
-CHECKER_PATH = "./checkpair"
-TRIALS_PER_PAIR = 10000
-
-def run_trials(cpu_A, cpu_B, trials):
-    proc = subprocess.run([CHECKER_PATH, str(cpu_A), str(cpu_B), str(trials)], stdout=subprocess.PIPE)
-    output = proc.stdout.decode("utf-8")
-    latency = int(output)
-    return latency
+class IdentityStrDict(dict):
+    def __missing__(self, key):
+        return str(key.id)
 
 def main():
-    cpu_count = len(os.sched_getaffinity(0))
-    print(f"Found {cpu_count} CPU(s)")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("input_path")
+    parser.add_argument("output_path")
 
-    graph = nx.Graph()
+    args = parser.parse_args()
 
-    bar = Bar("Running Trials", max=((cpu_count*(cpu_count-1)) / 2))
+    input_path = args.input_path
+    output_path = args.output_path
 
-    adj_matrix = [[None] * cpu_count] * cpu_count
-
-    for A, B in itertools.combinations(range(cpu_count), 2):
-            latency = run_trials(A, B, TRIALS_PER_PAIR)
-            graph.add_edge(A, B, weight=(1.0 / latency))
-            bar.next()
-
-    bar.finish()
+    graph = nx.read_graphml(input_path)
 
     weights = nx.get_edge_attributes(graph, "weight")
-    labels = { num:str(num) for num in range(cpu_count) }
-    edge_cmap = plt.get_cmap("afmhot")
 
     pos = nx.circular_layout(graph)
     pos = nx.spring_layout(graph, pos=pos)
 
+    print("Drawing Nodes")
     nx.draw_networkx_nodes(
             graph, pos,
             nodelist = graph.nodes(),
             node_color = 'black'
             )
+    print("Drawing Labels")
     nx.draw_networkx_labels(
             graph, pos,
-            labels=labels,
             font_color = 'white')
+    print("Drawing Edges")
     nx.draw_networkx_edges(
             graph, pos,
             edgelist = weights.keys(),
@@ -57,8 +45,8 @@ def main():
             edge_color = 'blue'
             )
 
-    plt.box(False)
-    plt.show()
+    print(f"Saving Figure to {output_path}")
+    plt.savefig(output_path)
 
 
 if __name__ == "__main__":

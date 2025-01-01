@@ -1,1 +1,5 @@
-heatmap
+checkpair
+*.graphml
+*.gml
+*.png
+*.pdf
