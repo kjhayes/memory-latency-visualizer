@@ -3,3 +3,7 @@ checkpair
 *.gml
 *.png
 *.pdf
+*.data
+
+.pycache
+.mypy_cache
