@@ -6,6 +6,7 @@ import seaborn as sns
 import argparse
 import networkx as nx
 
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("input_path")
@@ -26,6 +27,6 @@ def main():
     print(f"Saving Figure to {output_path}")
     plt.savefig(output_path)
 
+
 if __name__ == "__main__":
     main()
-
