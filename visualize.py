@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 
 import matplotlib.pyplot as plt
-import matplotlib
 import seaborn as sns
 import argparse
 import networkx as nx
