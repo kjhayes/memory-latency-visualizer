@@ -8,8 +8,10 @@ import networkx as nx
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("input_path")
-    parser.add_argument("output_path")
+    parser.add_argument("input_path",
+                        help="Path to generated results graphml file")
+    parser.add_argument("output_path",
+                        help="Desired plot file name")
 
     args = parser.parse_args()
 

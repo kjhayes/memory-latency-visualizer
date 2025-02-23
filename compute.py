@@ -21,7 +21,8 @@ def run_trials(cpu_A, cpu_B, trials):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("path")
+    parser.add_argument("path",
+                        help="Desired graphml results file name")
 
     args = parser.parse_args()
 
